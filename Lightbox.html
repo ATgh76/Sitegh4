@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Popup lightbox</title>
+
+    <style>
+        .titre { color: #900; text-align: center; font-size: 40px; }
+        h2 { position: relative; left: 180px; }
+        .gallery { display: flex; gap: .75rem; }
+        .gallery img { width: 150px; height: 110px; object-fit: cover; cursor: pointer; }
+
+        /* style lightbox */
+        .lightbox {
+            border: none;
+            padding: .5rem;
+            background: transparent;
+            box-shadow: none;
+        }
+        .lightbox img {
+            display: block;
+            max-width: min(90vw, 1000px);
+            max-height: 80vh;
+            border-radius: .5rem;
+        }
+        .lightbox::backdrop {
+            background: rgba(0, 0, 0, .85);
+        }
+    </style>
+</head>
+
+<body>
+    <p class="titre">Générateur popup</p>
+    <h2>Sélectionner une vignette</h2>
+    <br>
+
+    <div class="gallery">
+        <img src="photo01.jpg" alt="Description 1">
+        <img src="photo02.jpg" alt="Description 2">
+        <img src="photo03.jpg" alt="Description 3">
+        <img src="photo04.jpg" alt="Description 3">
+    </div>
+
+    <!-- Structure de lightbox : un seul dialog pour toute la galerie -->
+    <dialog id="lightbox" class="lightbox">
+        <img id="lightbox-img" src="" alt="" />
+    </dialog>
+
+    <!-- LE SCRIPT SE MET ICI, À LA FIN DU BODY -->
+    <script>
+        const dialog   = document.getElementById('lightbox');
+        const bigImage = document.getElementById('lightbox-img');
+
+        // 1) Ouvrir la popup au clic sur une vignette
+        document.querySelectorAll('.gallery img').forEach(thumb => {
+            thumb.addEventListener('click', () => {
+                bigImage.src = thumb.dataset.full || thumb.src;
+                bigImage.alt = thumb.alt;
+                dialog.showModal();
+            });
+        });
+
+        // 2) Fermer au clic sur le fond
+        dialog.addEventListener('click', (e) => {
+            if (e.target === dialog) dialog.close();
+        });
+    </script>
+</body>
+</html>
