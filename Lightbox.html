@@ -1,16 +1,17 @@
+<!-- Programme de test pour insertion d'une lightbox dans contenu HTML -->
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <title>Popup lightbox</title>
-
     <style>
         .titre { color: #900; text-align: center; font-size: 40px; }
-        h2 { position: relative; left: 180px; }
-        .gallery { display: flex; gap: .75rem; }
-        .gallery img { width: 150px; height: 110px; object-fit: cover; cursor: pointer; }
+        h2 { position: relative; left: 240px; }
+        .gallery { position: relative; left: 240px; display: flex; gap: .75rem; }        /* matrice de vignettes  */
+        .gallery img { width: 150px; height: 110px; object-fit: cover; cursor: pointer; }      /*  vignettes  */
 
-        /* style lightbox */
+        /*          style lightbox                 */
         .lightbox {
             border: none;
             padding: .5rem;
@@ -23,7 +24,7 @@
             max-height: 80vh;
             border-radius: .5rem;
         }
-        .lightbox::backdrop {
+        .lightbox::backdrop {                       /* fond derrière image lightbox  */
             background: rgba(0, 0, 0, .85);
         }
     </style>
@@ -33,8 +34,7 @@
     <p class="titre">Générateur popup</p>
     <h2>Sélectionner une vignette</h2>
     <br>
-
-    <div class="gallery">
+    <div class="gallery">       <!--   matrice de vignettes   -->
         <img src="photo01.jpg" alt="Description 1">
         <img src="photo02.jpg" alt="Description 2">
         <img src="photo03.jpg" alt="Description 3">
@@ -46,24 +46,49 @@
         <img id="lightbox-img" src="" alt="" />
     </dialog>
 
-    <!-- LE SCRIPT SE MET ICI, À LA FIN DU BODY -->
+    <!-- LE SCRIPT SE MET À LA FIN DU BODY -->
     <script>
-        const dialog   = document.getElementById('lightbox');
-        const bigImage = document.getElementById('lightbox-img');
+    const dialog   = document.getElementById('lightbox');
+    const bigImage = document.getElementById('lightbox-img');
 
-        // 1) Ouvrir la popup au clic sur une vignette
-        document.querySelectorAll('.gallery img').forEach(thumb => {
-            thumb.addEventListener('click', () => {
-                bigImage.src = thumb.dataset.full || thumb.src;
-                bigImage.alt = thumb.alt;
-                dialog.showModal();
-            });
-        });
+    // Toutes les vignettes, sous forme de liste indexée
+    const thumbs = Array.from(document.querySelectorAll('.gallery img'));
+    let indexCourant = 0;
 
-        // 2) Fermer au clic sur le fond
-        dialog.addEventListener('click', (e) => {
-            if (e.target === dialog) dialog.close();
+    // Fonction de pilotage : affiche la photo n° i
+    function afficherImage(i) {
+        // gestion du "tour de carousel" : après la dernière, retour à la 1re
+        indexCourant = (i + thumbs.length) % thumbs.length;
+        const thumb = thumbs[indexCourant];
+        bigImage.src = thumb.dataset.full || thumb.src;
+        bigImage.alt = thumb.alt;
+    }
+
+    // Clic sur une vignette : ouvrir la lightbox sur cette photo
+    thumbs.forEach((thumb, i) => {
+        thumb.addEventListener('click', () => {
+            afficherImage(i);
+            dialog.showModal();
         });
-    </script>
+    });
+
+    // Navigation clavier : fonctionnement borné
+    dialog.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+            e.preventDefault();               // neutralise le scroll natif
+        }
+        if (e.key === 'ArrowRight' && indexCourant < thumbs.length - 1) {
+            afficherImage(indexCourant + 1);
+        }
+        if (e.key === 'ArrowLeft' && indexCourant > 0) {
+            afficherImage(indexCourant - 1);
+        }
+    });
+    
+    // Fermer au clic sur le fond
+    dialog.addEventListener('click', (e) => {
+        if (e.target === dialog) dialog.close();
+    });
+</script>
 </body>
 </html>
