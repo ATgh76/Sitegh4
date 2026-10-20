@@ -68,7 +68,7 @@
 
 <body>
   <p class="titre">LANCEMENT D'UN PUZZLE</p>
-  <br><br>
+  <br>
   <h2>1- Sélectionnez une durée</h2>
 	<form autocomplete="off">		<!--  formulaire contenant les 8 choix de durée  -->
 	  <input type="radio" name="chxdur" onClick="duree=60">    1mn &nbsp &nbsp &nbsp
@@ -78,10 +78,8 @@
 	  <input type="radio" name="chxdur" onClick="duree=300">    5mn &nbsp &nbsp &nbsp
 	  <input type="radio" name="chxdur" onClick="duree=360">    6mn &nbsp &nbsp &nbsp
 	  <input type="radio" name="chxdur" onClick="duree=420">    7mn &nbsp &nbsp &nbsp
-	  <input type="radio" name="chxdur" onClick="duree=480">    8mn &nbsp &nbsp &nbsp
 	</form>
-  <br><br><br>
-
+  <br>
   <h2>2- Sélectionner le niveau de difficulté</h2>
   <form autocomplete="off">		<!--  formulaire avec les 4 niv de difficulté  -->
 	<input type="radio" name="chxdif" onClick="difficulte=3">    niv 3 &nbsp &nbsp &nbsp
@@ -89,10 +87,8 @@
 	<input type="radio" name="chxdif" onClick="difficulte=5">    niv 5 &nbsp &nbsp &nbsp
 	<input type="radio" name="chxdif" onClick="difficulte=6">    niv 6 &nbsp &nbsp &nbsp
   </form>
-  <br><br><br>
-
-  <h2>3- Sélectionner un puzzle</h2>
   <br>
+  <h2>3- Sélectionner un puzzle</h2>
   <div id="lanceur">      <!--  communique le numéro de la photo au lanceur  -->
     <button class="vignette" onclick="lancer(1)"><img src="photo1.jpg" alt="Photo 1"></button>
     <button class="vignette" onclick="lancer(2)"><img src="photo2.jpg" alt="Photo 2"></button>
