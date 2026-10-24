@@ -2,18 +2,21 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<meta name="robots" content="noindex">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Puzzle — version lightbox retouchée</title>
+<link rel="icon" type="image/x-icon" href="./favicon at.ico">
 <style>
   :root { font-family: system-ui, sans-serif; }
   body { background: #e4e4f4; margin: 0; padding: 24px; }
   h1 { font-size: 1.3rem; }
-  .titre { color: #900; text-align: center; font-size: clamp(26px, 5vw, 40px); }
-  h2 { text-align: center; }
-  form { text-align: center; }
+  .titre { color: #900; text-align: center; font-size: clamp(26px, 5vw, 40px); margin: 0 0 0.5em; }
+  /* marges pilotées en em : restent proportionnelles quand les polices varient */
+  h2 { text-align: center; margin: .75em 0 .25em; }
+  form { text-align: center; margin-top: 1em;}
 
   /* ---- Lanceur : centré, plus de décalage en px ---- */
-  #lanceur { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+  #lanceur { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; margin-top: 1.5em; }
   .vignette { padding: 0; border: 2px solid #888; background: none; cursor: pointer; }
   .vignette img { display: block; width: 160px; height: 107px; object-fit: cover; }
   @media (max-width: 640px) {
@@ -68,9 +71,8 @@
 
 <body>
   <p class="titre">LANCEMENT D'UN PUZZLE</p>
-  <br>
   <h2>1- Sélectionnez une durée</h2>
-	<form autocomplete="off">		<!--  formulaire contenant les 8 choix de durée  -->
+	<form autocomplete="off">		<!--  formulaire contenant les 7 choix de durée  -->
 	  <input type="radio" name="chxdur" onClick="duree=60">    1mn &nbsp &nbsp &nbsp
 	  <input type="radio" name="chxdur" onClick="duree=120">    2mn &nbsp &nbsp &nbsp
 	  <input type="radio" name="chxdur" onClick="duree=180" checked>    3mn &nbsp &nbsp &nbsp
@@ -79,7 +81,7 @@
 	  <input type="radio" name="chxdur" onClick="duree=360">    6mn &nbsp &nbsp &nbsp
 	  <input type="radio" name="chxdur" onClick="duree=420">    7mn &nbsp &nbsp &nbsp
 	</form>
-  <br>
+
   <h2>2- Sélectionner le niveau de difficulté</h2>
   <form autocomplete="off">		<!--  formulaire avec les 4 niv de difficulté  -->
 	<input type="radio" name="chxdif" onClick="difficulte=3">    niv 3 &nbsp &nbsp &nbsp
@@ -87,7 +89,7 @@
 	<input type="radio" name="chxdif" onClick="difficulte=5">    niv 5 &nbsp &nbsp &nbsp
 	<input type="radio" name="chxdif" onClick="difficulte=6">    niv 6 &nbsp &nbsp &nbsp
   </form>
-  <br>
+
   <h2>3- Sélectionner un puzzle</h2>
   <div id="lanceur">      <!--  communique le numéro de la photo au lanceur  -->
     <button class="vignette" onclick="lancer(1)"><img src="photo1.jpg" alt="Photo 1"></button>
