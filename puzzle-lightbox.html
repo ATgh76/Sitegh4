@@ -9,16 +9,17 @@
 <style>
   :root { font-family: system-ui, sans-serif; }
   body { background: #e4e4f4; margin: 0; padding: 24px; }
+  html, body { overscroll-behavior: none; }   /* pas de propagation du scroll, ni pull-to-refresh */
   h1 { font-size: 1.3rem; }
   .titre { color: #900; text-align: center; font-size: clamp(26px, 5vw, 40px); margin: 0 0 0.5em; }
   /* marges pilotées en em : restent proportionnelles quand les polices varient */
   h2 { text-align: center; margin: .75em 0 .25em; }
-  form { text-align: center; margin-top: 1em;}
+  form { text-align: center; }
 
   /* ---- Lanceur : centré, plus de décalage en px ---- */
   #lanceur { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; margin-top: 1.5em; }
   .vignette { padding: 0; border: 2px solid #888; background: none; cursor: pointer; }
-  .vignette img { display: block; width: 160px; height: 107px; object-fit: cover; }
+  .vignette img { display: block; width: 170px; height: 100px; object-fit: cover; }
   @media (max-width: 640px) {
     .vignette img { width: 120px; height: 80px; }
   }
@@ -29,11 +30,12 @@
     max-width: min(96vw, 1600px); max-height: 92dvh;
     margin: auto;            /* centrage garanti, même en cas de débordement */
     overflow: hidden;
+    overscroll-behavior: contain;   /* le dialog ne transmet jamais son scroll */
   }
   dialog::backdrop { background: rgba(0, 0, 0, .65); }
 
   /* L'aire de jeu positionne les overlays par rapport à elle */
-  #aire { position: relative; line-height: 0; }
+  #aire { position: relative; line-height: 0; touch-action: none; }  /* gestes nés sur les overlays aussi privatisés */
   #canvas {
     max-width: 96vw; max-height: 82dvh;   /* dvh : hauteur réelle visible sur mobile */
     border: 1px solid black; cursor: pointer;
@@ -55,8 +57,8 @@
     background: grey; color: white;
   }
   #miniature {      /* le modèle  */
-    position: absolute; right: 8px; bottom: 8px;
-    width: 18%; height: auto; aspect-ratio: 3 / 2; object-fit: cover;
+    position: absolute; right: 2px; bottom: 2px;
+    width: 10%; height: auto; aspect-ratio: 9 / 5; object-fit: cover;
     border: 4px solid grey; line-height: 0;
   }
   #pgagne, #pfin {
@@ -92,14 +94,14 @@
 
   <h2>3- Sélectionner un puzzle</h2>
   <div id="lanceur">      <!--  communique le numéro de la photo au lanceur  -->
-    <button class="vignette" onclick="lancer(1)"><img src="photo1.jpg" alt="Photo 1"></button>
-    <button class="vignette" onclick="lancer(2)"><img src="photo2.jpg" alt="Photo 2"></button>
-    <button class="vignette" onclick="lancer(3)"><img src="photo3.jpg" alt="Photo 3"></button>
-    <button class="vignette" onclick="lancer(4)"><img src="photo4.jpg" alt="Photo 4"></button>
-    <button class="vignette" onclick="lancer(5)"><img src="photo5.jpg" alt="Photo 5"></button>
-    <button class="vignette" onclick="lancer(6)"><img src="photo6.jpg" alt="Photo 6"></button>
-    <button class="vignette" onclick="lancer(7)"><img src="photo7.jpg" alt="Photo 7"></button>
-    <button class="vignette" onclick="lancer(8)"><img src="photo8.jpg" alt="Photo 8"></button>
+    <button class="vignette" onclick="lancer(1)"><img src="photo1.webp" alt="Photo 1"></button>
+    <button class="vignette" onclick="lancer(2)"><img src="photo2.webp" alt="Photo 2"></button>
+    <button class="vignette" onclick="lancer(3)"><img src="photo3.webp" alt="Photo 3"></button>
+    <button class="vignette" onclick="lancer(4)"><img src="photo4.webp" alt="Photo 4"></button>
+    <button class="vignette" onclick="lancer(5)"><img src="photo5.webp" alt="Photo 5"></button>
+    <button class="vignette" onclick="lancer(6)"><img src="photo6.webp" alt="Photo 6"></button>
+    <button class="vignette" onclick="lancer(7)"><img src="photo7.webp" alt="Photo 7"></button>
+    <button class="vignette" onclick="lancer(8)"><img src="photo8.webp" alt="Photo 8"></button>
   </div>
 
 <dialog id="lightbox">
@@ -143,9 +145,9 @@ var maPhoto = '';
 function demarrerPuzzle(duree, photo) {
   reinitialiser();
   tpRest = duree;
-  maPhoto = 'photo' + photo + '.jpg';
+  maPhoto = 'photo' + photo + '.webp';
   miniEl.src = maPhoto;
-  /* repli miniature : image de démo si le .jpg est absent */
+  /* repli miniature : image de démo si le .webp est absent */
   if (miniEl.dataset.fallback !== 'ok') {
     miniEl.addEventListener('error', function () {
       if (miniEl.src !== demoURL()) miniEl.src = demoURL();
@@ -378,7 +380,7 @@ dialog.addEventListener('click', function (e) {
   if (e.target === dialog) dialog.close();
 });
 
-/* ================= Photo de démonstration (si .jpg absent) ================= */
+/* ================= Photo de démonstration (si .webp absent) ================= */
 var _demoURL = null;
 function demoURL() {
   if (_demoURL) return _demoURL;
@@ -406,7 +408,7 @@ function demoCanvas() {
 }
 function creerPhotoDemo() { return demoCanvas(); }
 
-/* Repli des vignettes du lanceur si le .jpg est absent */
+/* Repli des vignettes du lanceur si le .webp est absent */
 document.querySelectorAll('#lanceur img').forEach(function (img) {
   img.addEventListener('error', function () {
     if (img.src !== demoURL()) img.src = demoURL();
